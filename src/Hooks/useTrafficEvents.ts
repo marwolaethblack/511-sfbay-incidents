@@ -11,6 +11,7 @@ export const useTrafficEvents = () => {
     try {
       setLoading(true);
       const res = await sfBayApi.getTrafficEvents();
+      setError(undefined);
       setTrafficEvents(res);
     } catch (err) {
       setTrafficEvents([]);

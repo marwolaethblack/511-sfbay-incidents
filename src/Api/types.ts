@@ -23,7 +23,7 @@ export interface ITrafficEvent {
     | "WEATHER_CONDITION"
     | "ROAD_CONDITION";
   event_subtypes: TrafficEventSubtypes[];
-  severity: "Minor" | "Moderate" | "Major" | "Unknown";
+  severity: TrafficEventSeverity;
   created: string;
   updated: string;
   areas: IAreaAffected[];
@@ -39,7 +39,14 @@ export interface ITrafficEvent {
   };
 }
 
-interface IRoad {
+export type TrafficEventSeverity =
+  | "Minor"
+  | "Moderate"
+  | "Major"
+  | "Severe"
+  | "Unknown";
+
+export interface IRoad {
   name: string;
   from: string;
   direction: string;
@@ -50,13 +57,13 @@ interface IRoad {
   ["+article"]: string;
 }
 
-interface IAreaAffected {
+export interface IAreaAffected {
   name: string;
   id: number;
   url: string;
 }
 
-interface IPointGeography {
+export interface IPointGeography {
   type: "Point";
   crs: {
     type: string;
@@ -65,9 +72,12 @@ interface IPointGeography {
   coordinates: ICoordinate;
 }
 
+/**
+ * Longitude, Latitude
+ * */
 type ICoordinate = [number, number];
 
-type TrafficEventSubtypes =
+export type TrafficEventSubtypes =
   | "unknown"
   | "Construction"
   | "Emergency construction"
