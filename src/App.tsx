@@ -1,25 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "antd/dist/reset.css";
+import { TrafficEventsTable } from "./Components/TrafficEventsTable";
+import { Layout } from "antd";
+import { Header, Content } from "antd/es/layout/layout";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <Header className="flex items-center">
+        <div className="text-white text-xl">511 SF Bay Traffic Events</div>
+      </Header>
+      <Content>
+        <div className="px-40 flex items-center justify-center flex-col min-h-[500px]">
+          <TrafficEventsTable />
+        </div>
+      </Content>
+    </Layout>
   );
 }
 
