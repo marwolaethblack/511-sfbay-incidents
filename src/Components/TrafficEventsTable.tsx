@@ -1,6 +1,6 @@
-import { Button, Skeleton, Table, TableProps } from "antd";
+import { Button, Table, TableProps } from "antd";
 import { format, isBefore } from "date-fns";
-import React from "react";
+import React, { FunctionComponent } from "react";
 import {
   IPointGeography,
   IRoad,
@@ -11,25 +11,31 @@ import {
 import { useTrafficEvents } from "../Hooks/useTrafficEvents";
 import { ErrorDisplay } from "./ErrorDisplay";
 
-export const TrafficEventsTable = () => {
+export const TrafficEventsTable: FunctionComponent = () => {
   const { loading, error, trafficEvents, refetch } = useTrafficEvents();
-
-  if (loading) {
-    return <Skeleton loading />;
-  }
 
   if (error) {
     return <ErrorDisplay error={error} retry={refetch} />;
   }
 
   return (
-    <Table
-      dataSource={filterInactiveEvents(groupEventsBySeverity(trafficEvents))}
-      rowKey={"id"}
-      columns={columns}
-      rowClassName={(row) => getClassBySeverity(row.severity)}
-      onChange={(_, __, ___, extra) => {}}
-    />
+    <>
+      <Button
+        type="primary"
+        className="ml-auto my-3 bg-blue-500"
+        size="large"
+        onClick={() => refetch()}
+      >
+        Refresh
+      </Button>
+      <Table
+        loading={loading}
+        dataSource={filterInactiveEvents(groupEventsBySeverity(trafficEvents))}
+        rowKey={"id"}
+        columns={columns}
+        rowClassName={(row) => getClassBySeverity(row.severity)}
+      />
+    </>
   );
 };
 
@@ -76,7 +82,7 @@ const getClassBySeverity = (severity: TrafficEventSeverity) => {
   }
 };
 
-// Looks like antd has a visual bug on sort where it overrides background color set in rowClassName
+// Looks like antd has a visual bug on sort where it overrides background color set in rowClassName on sort
 const sortDates = (a: ITrafficEvent, b: ITrafficEvent) => {
   return isBefore(new Date(a.created), new Date(b.created)) ? 1 : -1;
 };
@@ -95,7 +101,7 @@ const columns: TableProps<ITrafficEvent>["columns"] = [
     dataIndex: "roads" as keyof ITrafficEvent,
     render: (val: IRoad[]) => {
       return val
-        .map((r) => r.name + " " + r.from + " to " + r.direction)
+        .map((r) => r.name + " " + r.from + " " + r.direction)
         .join(", ");
     },
   },
@@ -111,7 +117,7 @@ const columns: TableProps<ITrafficEvent>["columns"] = [
   {
     title: "Location",
     dataIndex: "geography" as keyof ITrafficEvent,
-    render: (val: IPointGeography, record) => {
+    render: (val: IPointGeography) => {
       if (val.type === "Point" && val.coordinates) {
         return (
           <Button
@@ -126,7 +132,7 @@ const columns: TableProps<ITrafficEvent>["columns"] = [
           </Button>
         );
       }
-      return null;
+      return "Location unavailable";
     },
   },
   {
