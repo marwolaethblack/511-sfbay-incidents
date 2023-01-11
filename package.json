@@ -43,12 +43,6 @@
       "last 1 safari version"
     ]
   },
-  "jest": {
-    "transformIgnorePatterns": [
-      "node_modules/(?!axios)/",
-      "/node_modules/(?!antd|@ant-design|rc-.+?|@babel/runtime).+(js|jsx)$"
-    ]
-  },
   "devDependencies": {
     "tailwindcss": "^3.2.4"
   }
